@@ -1,0 +1,23 @@
+{
+  "name": "sakura",
+  "version": "1.0.0",
+  "description": "a web restful  framework for node ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build":"tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/suanzi-yi/sakura.git"
+  },
+  "author": "suanzi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/suanzi-yi/sakura/issues"
+  },
+  "homepage": "https://github.com/suanzi-yi/sakura#readme",
+  "devDependencies": {
+    "typescript": "^4.8.4"
+  }
+}
