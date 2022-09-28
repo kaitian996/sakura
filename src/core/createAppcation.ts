@@ -1,7 +1,7 @@
-import express from 'express'
+import express, { Express } from 'express'
 import "reflect-metadata"
 import { rootControllerMap } from '../decorator/annotation/controllerContainer'
-import { metaKeyEnum } from './interface'
+import { metaDataKey } from '../decorator/annotation/index'
 import { isConstructor, isFunction } from '../utils'
 
 const mapRoute = (prototype: Object) => {
@@ -12,14 +12,16 @@ const mapRoute = (prototype: Object) => {
         const fn = prototype[methodName]
 
         // 取出定义的 metadata
-        const route = Reflect.getMetadata(metaKeyEnum.path, fn)
-        const method = Reflect.getMetadata(metaKeyEnum.method, fn)
-        const query: string = Reflect.getMetadata(metaKeyEnum.param, prototype, methodName)
+        const route: string = Reflect.getMetadata(metaDataKey.isPath, fn)
+        const method: string = Reflect.getMetadata(metaDataKey.isMethod, fn)
+        const params: string[] = Reflect.getMetadata(metaDataKey.isParam, prototype, methodName)
+        const paramPosition: string = Reflect.getMetadata(metaDataKey.isParamPosition, prototype, methodName)
         return {
             route,
             method,
             fn: fn.bind(prototype),
-            query,
+            paramPosition,
+            params,
             methodName
         }
     })
@@ -30,27 +32,18 @@ export class sakuraAppcation {
         this.port = port
     }
     private registerApp() {
-        const app = express()
+        const app:Express = express()
+        app.use(express.json());
+        app.use(express.urlencoded({ extended: true }));
+
         rootControllerMap.getController().forEach(controllerTag => {
+            console.log('路由信息收集', mapRoute(controllerTag.prototype))
             mapRoute(controllerTag.prototype).forEach(item => {
-                switch (item.method) {
-                    case 'get':
-                        app.get(item.route, (req, res) => {
-                            const params = req.query
-                            res.send(item.fn(params[item.query]))
-                        })
-                        break
-                    case 'post':
-                        app.post(item.route, (req, res) => {
-                            res.send(item.fn())
-                        })
-                        break
-                    default:
-                        app.get(item.route, (req, res) => {
-                            res.send(item.fn())
-                        })
-                        break
-                }
+                app[item.method](item.route, (req: Express.Request, res: any) => {
+                    const paramObject = req[item.paramPosition]
+                    const params: any[] = item.params.map(key => paramObject[key])
+                    res.send(item.fn(...params))
+                })
             })
         })
 
