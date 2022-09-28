@@ -5,7 +5,6 @@ export class ControllerContainer {
         this.controllerMap.push(controller)
     }
     getController() {
-        console.log('收集的依赖', this.controllerMap);
         return this.controllerMap
     }
 }

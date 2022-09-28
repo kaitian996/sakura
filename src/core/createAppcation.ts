@@ -32,8 +32,6 @@ export class sakuraAppcation {
     private registerApp() {
         const app = express()
         rootControllerMap.getController().forEach(controllerTag => {
-            console.log('controllerTag', mapRoute(controllerTag.prototype))
-
             mapRoute(controllerTag.prototype).forEach(item => {
                 switch (item.method) {
                     case 'get':

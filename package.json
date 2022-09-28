@@ -2,7 +2,8 @@
   "name": "sakura",
   "version": "1.0.0",
   "description": "a web restful  framework for node ",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc"
