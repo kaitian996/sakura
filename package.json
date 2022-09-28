@@ -1,5 +1,5 @@
 {
-  "name": "sakura",
+  "name": "sakuraframework",
   "version": "1.0.0",
   "description": "a web restful  framework for node ",
   "main": "lib/index.js",
