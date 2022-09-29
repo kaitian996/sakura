@@ -156,4 +156,4 @@ export class Admin {
     }
 }
 ```
-目前提供了`@Query()`,`@Body('age')`,`@Headers()` 来分别获取query、body、header参
+目前提供了`@Query()`,`@Body('age')`,`@Headers()` 来分别获取query、body、header参数
