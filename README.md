@@ -123,7 +123,7 @@ export class Admin {
     @Get('/name') 
     getName() { 
         console.log('getName');
-        return }
+        return 
     }
     
     // post请求
