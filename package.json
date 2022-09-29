@@ -1,6 +1,6 @@
 {
   "name": "sakuraframework",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "a web restful  framework for node ",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
