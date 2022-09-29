@@ -14,13 +14,11 @@ const mapRoute = (prototype: Object) => {
         // 取出定义的 metadata
         const route: string = Reflect.getMetadata(metaDataKey.isPath, fn)
         const method: string = Reflect.getMetadata(metaDataKey.isMethod, fn)
-        const params: string[] = Reflect.getMetadata(metaDataKey.isParam, prototype, methodName)
-        const paramPosition: string = Reflect.getMetadata(metaDataKey.isParamPosition, prototype, methodName)
+        const params: { param: string; paramType: Function; paramPosition: string }[] = Reflect.getMetadata(metaDataKey.isParam, prototype, methodName)
         return {
             route,
             method,
             fn: fn.bind(prototype),
-            paramPosition,
             params,
             methodName
         }
@@ -32,7 +30,7 @@ export class sakuraAppcation {
         this.port = port
     }
     private registerApp() {
-        const app:Express = express()
+        const app: Express = express()
         app.use(express.json());
         app.use(express.urlencoded({ extended: true }));
 
@@ -40,8 +38,8 @@ export class sakuraAppcation {
             console.log('路由信息收集', mapRoute(controllerTag.prototype))
             mapRoute(controllerTag.prototype).forEach(item => {
                 app[item.method](item.route, (req: Express.Request, res: any) => {
-                    const paramObject = req[item.paramPosition]
-                    const params: any[] = item.params.map(key => paramObject[key])
+                    //收集参数
+                    const params: any[] = item.params.map(param => param.paramType(req[param.paramPosition][param.param]))
                     res.send(item.fn(...params))
                 })
             })

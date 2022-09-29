@@ -6,7 +6,6 @@ export enum metaDataKey {
     isPath = 'path',
     isConstructor = 'constructor',
     isParam = 'param',
-    isParamPosition = 'paramPosition'
 }
 export const Controller = (path: string): ClassDecorator => {
     return (target) => {
@@ -26,12 +25,17 @@ const createMappingDecorator = (method: httpMethod) => (path: string): MethodDec
 type paramPosition = 'query' | 'body' | 'headers' | 'cookie' | 'session'
 const createParameterDecorator = (paramPosition: paramPosition) => (param: string): ParameterDecorator => {
     return (target, propertyKey, parameterIndex) => {
-        //放参数
-        let paramList: string[] = Reflect.getMetadata(metaDataKey.isParam, target, propertyKey) || []
-        paramList.push(param)
+        //放参数和参数类型与位置
+        let paramList: { param: string; paramType: Function; paramPosition:string}[] = Reflect.getMetadata(metaDataKey.isParam, target, propertyKey) || []
+        let typeList: Function[] = Reflect.getMetadata('design:paramtypes', target, propertyKey) || []
+
+        paramList.push({
+            param,
+            paramType: typeList[parameterIndex],
+            paramPosition: paramPosition
+        })
         Reflect.defineMetadata(metaDataKey.isParam, paramList, target, propertyKey)
-        //位置
-        Reflect.defineMetadata(metaDataKey.isParamPosition, paramPosition, target, propertyKey)
+
     }
 }
 export const Get = createMappingDecorator('get')
