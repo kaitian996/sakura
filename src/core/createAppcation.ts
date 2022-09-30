@@ -55,6 +55,7 @@ export class sakuraAppcation {
     public run() {
         this.registerApp().listen(this.port, () => {
             console.log('sakuraAppcation is running!')
+            console.log(`running at 127.0.0.1:${this.port}`)
         })
     }
 }
