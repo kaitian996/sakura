@@ -1,6 +1,6 @@
 # sakura
 
-基于express的node框架  
+node后端框架  
 具有IOC控制反转、DI依赖注入等特性  
 提供多种装饰器 如：
 ```javascript
@@ -156,4 +156,4 @@ export class Admin {
     }
 }
 ```
-目前提供了`@Query()`,`@Body('age')`,`@Headers()` 来分别获取query、body、header参数
+目前提供了`@Query()`,`@Body()`,`@Headers()` 来分别获取query、body、header参数
