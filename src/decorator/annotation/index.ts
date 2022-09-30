@@ -15,7 +15,7 @@ export const Controller = (path: string): ClassDecorator => {
         Reflect.defineMetadata(metaDataKey.isConstructor, target, target);
     }
 }
-type httpMethod = 'get' | 'post'
+type httpMethod = 'get' | 'post' | 'put' | 'delete' | 'put' | 'patch' | 'options' | 'head' | 'all'
 const createMappingDecorator = (method: httpMethod) => (path: string): MethodDecorator => {
     return (target, propertyKey, descriptor) => {
         Reflect.defineMetadata(metaDataKey.isMethod, method, descriptor.value as any)
@@ -26,7 +26,7 @@ type paramPosition = 'query' | 'body' | 'headers' | 'cookie' | 'session'
 const createParameterDecorator = (paramPosition: paramPosition) => (param: string): ParameterDecorator => {
     return (target, propertyKey, parameterIndex) => {
         //放参数和参数类型与位置
-        let paramList: { param: string; paramType: Function; paramPosition:string}[] = Reflect.getMetadata(metaDataKey.isParam, target, propertyKey) || []
+        let paramList: { param: string; paramType: Function; paramPosition: string }[] = Reflect.getMetadata(metaDataKey.isParam, target, propertyKey) || []
         let typeList: Function[] = Reflect.getMetadata('design:paramtypes', target, propertyKey) || []
 
         paramList.push({
@@ -38,8 +38,15 @@ const createParameterDecorator = (paramPosition: paramPosition) => (param: strin
 
     }
 }
+
 export const Get = createMappingDecorator('get')
 export const Post = createMappingDecorator('post')
+export const Delete = createMappingDecorator('delete')
+export const Put = createMappingDecorator('put')
+export const Patch = createMappingDecorator('patch')
+export const Options = createMappingDecorator('options')
+export const Head = createMappingDecorator('head')
+export const All = createMappingDecorator('all')
 
 export const Query = createParameterDecorator('query')
 export const Body = createParameterDecorator('body')
