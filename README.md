@@ -80,6 +80,7 @@ import { sakuraAppcation } from 'sakuraframework' //启动类
 //导入controller层
 import './controller'
 new sakuraAppcation(8080).run() //设置端口
+//sakuraAppcation(port:number,options:{cors:boolean;}={cors:true}) //设置端口，或设置跨域，默认开启跨域
 ```
 ```shell
 tsc #编译ts
