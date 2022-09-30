@@ -23,7 +23,7 @@ const createMappingDecorator = (method: httpMethod) => (path: string): MethodDec
     }
 }
 type paramPosition = 'query' | 'body' | 'headers' | 'cookie' | 'session'
-const createParameterDecorator = (paramPosition: paramPosition) => (param: string): ParameterDecorator => {
+const createParameterDecorator = (paramPosition: paramPosition) => (param: string = '*'): ParameterDecorator => {
     return (target, propertyKey, parameterIndex) => {
         //放参数和参数类型与位置
         let paramList: { param: string; paramType: Function; paramPosition: string }[] = Reflect.getMetadata(metaDataKey.isParam, target, propertyKey) || []

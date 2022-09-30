@@ -5,6 +5,8 @@ import { metaDataKey } from '../decorator/annotation/index'
 import { isConstructor, isFunction } from '../utils'
 
 const mapRoute = (prototype: Object) => {
+    const constructor = prototype.constructor
+    const rootPath: string = Reflect.getMetadata(metaDataKey.isController, constructor)
     // 筛选出类的 methodName
     const methodsNames = Object.getOwnPropertyNames(prototype)
         .filter(item => !isConstructor(item) && isFunction(prototype[item]))
@@ -16,7 +18,7 @@ const mapRoute = (prototype: Object) => {
         const method: string = Reflect.getMetadata(metaDataKey.isMethod, fn)
         const params: { param: string; paramType: Function; paramPosition: string }[] = Reflect.getMetadata(metaDataKey.isParam, prototype, methodName)
         return {
-            route,
+            route: rootPath + route,
             method,
             fn: fn.bind(prototype),
             params,
@@ -39,7 +41,9 @@ export class sakuraAppcation {
             mapRoute(controllerTag.prototype).forEach(item => {
                 app[item.method](item.route, (req: Express.Request, res: any) => {
                     //收集参数
-                    const params: any[] = item.params.map(param => param.paramType(req[param.paramPosition][param.param]))
+                    const params: any[] = item.params.map(paramObject => {
+                        return paramObject.param === '*' ? req[paramObject.paramPosition] : paramObject.paramType(req[paramObject.paramPosition][paramObject.param])
+                    })
                     res.send(item.fn(...params))
                 })
             })
