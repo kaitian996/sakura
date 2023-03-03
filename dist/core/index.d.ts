@@ -1,0 +1,1 @@
+export { sakuraAppcation } from './createAppcation';
